@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>NaNoWriMo Writing Sprints</h1>
+    <p>How long would you like to sprint?</p>
+    <form>
+      <input type="radio" id="sprint10" name="sprint-length" value="sprint10" />
+      <label for="sprint10">10 min</label><br />
+      <input type="radio" id="sprint15" name="sprint-length" value="sprint15" />
+      <label for="sprint15">15 min</label><br />
+      <input type="radio" id="sprint20" name="sprint-length" value="sprint20" />
+      <label for="sprint20">20 min</label><br />
+      <input type="radio" id="sprint30" name="sprint-length" value="sprint30" />
+      <label for="sprint30">30 min</label><br />
+      <input
+        type="radio"
+        id="sprintcustom"
+        name="sprint-length"
+        value="sprintcustom"
+      />
+      <label for="sprintcustom">Custom length</label><br />
+
+      <input type="submit" value="Start at :00" />
+      <input type="submit" value="Start now" />
+    </form>
+  </body>
+</html>
+
+<!-- add date-fns -->
+<!-- ? round to nearest min. Calc seconds between that time and seconds at capture. Count those seconds down  -->
+<!-- differenceInSeconds -->

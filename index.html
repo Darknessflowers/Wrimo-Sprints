@@ -8,26 +8,36 @@
   <body>
     <h1>NaNoWriMo Writing Sprints</h1>
     <p>How long would you like to sprint?</p>
-    <form>
-      <input type="radio" id="sprint10" name="sprint-length" value="sprint10" />
+    <form id="timerLength">
+      <input type="radio" id="sprint1" name="sprint-length" value="1" />
+      <label for="sprint1">1min</label><br />
+      <input type="radio" id="sprint10" name="sprint-length" value="10" />
       <label for="sprint10">10 min</label><br />
-      <input type="radio" id="sprint15" name="sprint-length" value="sprint15" />
+      <input type="radio" id="sprint15" name="sprint-length" value="15" />
       <label for="sprint15">15 min</label><br />
-      <input type="radio" id="sprint20" name="sprint-length" value="sprint20" />
+      <input type="radio" id="sprint20" name="sprint-length" value="20" />
       <label for="sprint20">20 min</label><br />
-      <input type="radio" id="sprint30" name="sprint-length" value="sprint30" />
+      <input type="radio" id="sprint30" name="sprint-length" value="30" />
       <label for="sprint30">30 min</label><br />
-      <input
+      <!-- <input
         type="radio"
         id="sprintcustom"
         name="sprint-length"
         value="sprintcustom"
       />
-      <label for="sprintcustom">Custom length</label><br />
+      <label for="sprintcustom">Custom length</label><br /> -->
 
-      <input type="submit" value="Start at :00" />
-      <input type="submit" value="Start now" />
+      <div id="display">
+        <span class="timeDisplay">10:00</span>
+      </div>
+      <!-- <input type="submit" value="Start at :00" /> -->
+      <!-- <input  type="submit" value="Start now" /> -->
     </form>
+    <button id="startNow">Start now</button>
+    <button id="startNext">Start next min</button>
+
+
+    <script src="./scripts.js"></script>
   </body>
 </html>
 

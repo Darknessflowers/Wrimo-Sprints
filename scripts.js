@@ -33,6 +33,7 @@ function startTimer(seconds) {
       console.log('time is up');
       notificationText = 'Time up!';
       playNotification();
+      startTimerBtn.innerText = 'Start';
       clearInterval(timer);
       isTimerRunning = false;
     }

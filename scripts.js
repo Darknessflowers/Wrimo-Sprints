@@ -11,11 +11,10 @@ let timerDisplay = document.querySelector('.timeDisplay');
 let startNextMinTimer;
 let startTimerBtn = document.querySelector('#startNow');
 let startNextBtn =  document.querySelector('#startNext');
-let pauseBtn =  document.querySelector('#pause');
 let resetBtn =  document.querySelector('#reset');
-
 let isTimerRunning = false;
 var timer;
+
 function startTimer(seconds) {
   // debugger;
   let ms = seconds * 1000;
@@ -57,17 +56,16 @@ function resumeTimer() {
     console.log('Console was running');
   }
 }
+
 function resetTimer() {
+  clearInterval(startNextMinTimer);
+  startNextBtn.innerText = `Start next min`;
   clearInterval(timer);
   isTimerRunning = false;
   timeLeft = 0;
   startTimerBtn.innerText = 'Start';
   // updateDisplay();
   updateDisplayBeforeStart();
-}
-
-function scheduleTimer() {
-
 }
 
 function startNextMin() {
@@ -86,6 +84,15 @@ function startNextMin() {
         startTimer(timeLeftSeconds);
     }
   }, 1000);
+}
+
+function playNotification() {
+
+}
+
+
+function scheduleTimer() {
+
 }
 
 // function updateDisplayBeforeStart() {
@@ -133,6 +140,7 @@ function updateDisplayBeforeStart() {
 function updateDisplay() {
   let min = Math.floor(timeLeft/60000);
   let seconds = Math.floor(timeLeft/1000)%60;
+  min = (min < 10 ? "0" : "") + min;
   seconds = (seconds < 10 ? "0" : "") + seconds;
   timerDisplay.innerHTML = min+":"+seconds;
 }

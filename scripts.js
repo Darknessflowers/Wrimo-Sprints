@@ -12,6 +12,9 @@ let startNextMinTimer;
 let startTimerBtn = document.querySelector('#startNow');
 let startNextBtn =  document.querySelector('#startNext');
 let resetBtn =  document.querySelector('#reset');
+let requestPermissionBtn = document.querySelector('#requestPermission');
+let notificationImg = './favicon.png';
+let notificationText = 'Time up!';
 let isTimerRunning = false;
 var timer;
 
@@ -28,6 +31,8 @@ function startTimer(seconds) {
     console.log(timeLeft);
     if(timeLeft === 0) {
       console.log('time is up');
+      notificationText = 'Time up!';
+      playNotification();
       clearInterval(timer);
       isTimerRunning = false;
     }
@@ -79,6 +84,8 @@ function startNextMin() {
     startNextBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
     if(seconds === 0) {
         console.log('Starting timer!');
+        notificationText = 'Start writing!';
+        playNotification();
         startNextBtn.innerText = `Write!`;
         clearInterval(startNextMinTimer);
         startTimer(timeLeftSeconds);
@@ -87,7 +94,7 @@ function startNextMin() {
 }
 
 function playNotification() {
-
+  new Notification('Writing Sprints Timer', { body: notificationText, vibrate: [200, 100, 200], icon: notificationImg });
 }
 
 
@@ -145,16 +152,7 @@ function updateDisplay() {
   timerDisplay.innerHTML = min+":"+seconds;
 }
 
-updateDisplayBeforeStart();
 
-timerForm.addEventListener('change', function() {
-  // update timer value when radio button is selected
-  timerValue = document.querySelector("input[name='sprint-length']:checked");
-  console.log(timerValue.value);
-  //convert min to seconds
-  timeLeftSeconds = timerValue.value * 60;
-  updateDisplayBeforeStart();
-});
 
 startTimerBtn.addEventListener('click', function() {
   if(isTimerRunning === false) {
@@ -168,5 +166,72 @@ startTimerBtn.addEventListener('click', function() {
     pauseTimer();
   }
 });
-startNextBtn.addEventListener('click', startNextMin);
-resetBtn.addEventListener('click', resetTimer);
+
+function checkNotificationPromise() {
+  try {
+    Notification.requestPermission().then();
+  } catch(e) {
+    return false;
+  }
+
+  return true;
+}
+
+function askNotificationPermission() {
+  // function to actually ask the permissions
+  function handlePermission(permission) {
+    // Whatever the user answers, we make sure Chrome stores the information
+    if(!('permission' in Notification)) {
+      Notification.permission = permission;
+    }
+    // set the button to shown or hidden, depending on what the user answers
+    if(Notification.permission === 'denied' || Notification.permission === 'default') {
+        requestPermissionBtn.style.display = 'block';
+    } else {
+      requestPermissionBtn.style.display = 'none';
+    }
+  }
+  // Check if the browser supports notifications
+  if (!('Notification' in window)) {
+    console.log("This browser does not support notifications.");
+    requestPermissionBtn.style.display = 'none';
+  } else {
+    if(checkNotificationPromise()) {
+      Notification.requestPermission()
+      .then((permission) => {
+        handlePermission(permission);
+      })
+    } else {
+      Notification.requestPermission(function(permission) {
+        handlePermission(permission);
+      });
+    }
+  }
+}
+
+function init() {
+  timerForm.addEventListener('change', function() {
+    // update timer value when radio button is selected
+    timerValue = document.querySelector("input[name='sprint-length']:checked");
+    console.log(timerValue.value);
+    //convert min to seconds
+    timeLeftSeconds = timerValue.value * 60;
+    updateDisplayBeforeStart();
+  });
+
+    // Ask for permission to show notifications
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    requestPermissionBtn.style.display = 'none';
+  } else {
+    requestPermissionBtn.addEventListener('click', askNotificationPermission);
+  }
+
+  updateDisplayBeforeStart();
+
+  startNextBtn.addEventListener('click', startNextMin);
+  resetBtn.addEventListener('click', resetTimer);
+  requestPermissionBtn.addEventListener('click', askNotificationPermission);
+}
+
+init(); 
+

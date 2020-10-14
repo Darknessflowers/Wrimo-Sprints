@@ -11,12 +11,18 @@ let timerDisplay = document.querySelector('.timeDisplay');
 let startNextMinTimer;
 let startTimerBtn = document.querySelector('#startNow');
 let startNextBtn =  document.querySelector('#startNext');
+let pauseBtn =  document.querySelector('#pause');
+let resetBtn =  document.querySelector('#reset');
+
+let isTimerRunning = false;
 var timer;
 function startTimer(seconds) {
   // debugger;
   let ms = seconds * 1000;
   let startTime = new Date().getTime();
   console.log(startTime);
+  isTimerRunning = true;
+  startTimerBtn.innerText = 'Pause';
   timer = setInterval(() => {
     timeLeft = Math.max(0, ms - (new Date().getTime()-startTime));
     updateDisplay();
@@ -24,12 +30,40 @@ function startTimer(seconds) {
     if(timeLeft === 0) {
       console.log('time is up');
       clearInterval(timer);
+      isTimerRunning = false;
     }
   }, 250);
 }
 
 function pauseTimer() {
+if (isTimerRunning) {
+  clearInterval(timer);
+  startTimerBtn.innerText = 'Resume';
+  isTimerRunning = false;
+} else {
+  console.log('Timer wasn\'t running');
+}
+}
 
+function resumeTimer() {
+  if (!isTimerRunning) {
+    //startTimer takes seconds and timeLeft is ms so convert back to seconds
+    //resume the timer
+    startTimer(timeLeft/1000);
+    startTimerBtn.innerText = 'Pause';
+    isTimerRunning = true;
+  }
+  else {
+    console.log('Console was running');
+  }
+}
+function resetTimer() {
+  clearInterval(timer);
+  isTimerRunning = false;
+  timeLeft = 0;
+  startTimerBtn.innerText = 'Start';
+  // updateDisplay();
+  updateDisplayBeforeStart();
 }
 
 function scheduleTimer() {
@@ -40,11 +74,14 @@ function startNextMin() {
   let currentTime = new Date();
   let seconds = currentTime.getSeconds();
   console.log(seconds);
+  startNextBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
   startNextMinTimer = setInterval(() => {
     currentTime = new Date();
     seconds = currentTime.getSeconds();
+    startNextBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
     if(seconds === 0) {
         console.log('Starting timer!');
+        startNextBtn.innerText = `Write!`;
         clearInterval(startNextMinTimer);
         startTimer(timeLeftSeconds);
     }
@@ -112,6 +149,16 @@ timerForm.addEventListener('change', function() {
 });
 
 startTimerBtn.addEventListener('click', function() {
-  startTimer(timeLeftSeconds);
+  if(isTimerRunning === false) {
+    if(timeLeft === 0) {
+    startTimer(timeLeftSeconds);
+    }
+    else {
+      resumeTimer();
+    }
+  } else {
+    pauseTimer();
+  }
 });
 startNextBtn.addEventListener('click', startNextMin);
+resetBtn.addEventListener('click', resetTimer);

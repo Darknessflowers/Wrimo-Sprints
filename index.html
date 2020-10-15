@@ -3,29 +3,50 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://use.typekit.net/tsu4lfp.css" />
     <title>Writing Sprints</title>
   </head>
   <body>
-    <h1>NaNoWriMo Writing Sprints</h1>
-    <p>How long would you like to sprint?</p>
-    <form id="timerLength">
-      <input type="radio" id="sprint1" name="sprint-length" value="1" />
-      <label for="sprint1">1min</label><br />
-      <input
-        type="radio"
-        id="sprint10"
-        name="sprint-length"
-        value="10"
-        checked
-      />
-      <label for="sprint10">10 min</label><br />
-      <input type="radio" id="sprint15" name="sprint-length" value="15" />
-      <label for="sprint15">15 min</label><br />
-      <input type="radio" id="sprint20" name="sprint-length" value="20" />
-      <label for="sprint20">20 min</label><br />
-      <input type="radio" id="sprint30" name="sprint-length" value="30" />
-      <label for="sprint30">30 min</label><br />
-      <!-- <input
+    <header>
+      <div class="wrap">
+        <nav>
+          <ul>
+            <li><a href="">Timer</a></li>
+            <li><a href="">History</a></li>
+            <li><a href="">Graphs</a></li>
+            <li><a href="">Options</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div id="timeHome" class="wrap">
+      <div id="timerContainer">
+        <h1>Writing Sprints Timer</h1>
+
+        <h2>How long would you like to sprint?</h2>
+        <form id="timerLength">
+          <input type="radio" id="sprint1" name="sprint-length" value="1" />
+          <label for="sprint1">1min</label><br />
+          <input
+            type="radio"
+            id="sprint10"
+            name="sprint-length"
+            value="10"
+            checked
+          />
+          <label for="sprint10">10 min</label><br />
+          <input type="radio" id="sprint15" name="sprint-length" value="15" />
+          <label for="sprint15">15 min</label><br />
+          <input type="radio" id="sprint20" name="sprint-length" value="20" />
+          <label for="sprint20">20 min</label><br />
+          <input type="radio" id="sprint30" name="sprint-length" value="30" />
+          <label for="sprint30">30 min</label><br />
+          <!-- <input
         type="radio"
         id="sprintcustom"
         name="sprint-length"
@@ -33,17 +54,18 @@
       />
       <label for="sprintcustom">Custom length</label><br /> -->
 
-      <div id="display">
-        <span class="timeDisplay">10:00</span>
+          <div id="display">
+            <span class="timeDisplay">10:00</span>
+          </div>
+          <!-- <input type="submit" value="Start at :00" /> -->
+          <!-- <input  type="submit" value="Start now" /> -->
+        </form>
+        <button id="startNow">Start</button>
+        <button id="startNext">Start next min</button>
+        <button id="reset">Cancel</button>
+        <button id="requestPermission">Allow notifications</button>
       </div>
-      <!-- <input type="submit" value="Start at :00" /> -->
-      <!-- <input  type="submit" value="Start now" /> -->
-    </form>
-    <button id="startNow">Start</button>
-    <button id="startNext">Start next min</button>
-    <button id="reset">Cancel</button>
-    <button id="requestPermission">Allow notifications</button>
-
+    </div>
     <script src="./scripts.js"></script>
   </body>
 </html>

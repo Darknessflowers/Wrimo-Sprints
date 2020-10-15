@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+body {
+  /* background-image: url("./images/patrick-fore-0gkw_9fy0eQ-unsplash.jpg"); */
+  background-image: url("./images/james-pond-Z0uzZSM5i4M-unsplash.jpg");
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #0e0e0e;
+  min-height: 100vh;
+  background-position: center top;
+  font-size: 16px;
+
+  /* font-family: "Special Elite", cursive; */
+
+  font-family: coronette, serif;
+}
+h1 {
+  margin-bottom: 20px;
+}
+h2 {
+  margin-bottom: 10px;
+}
+header {
+  width: 100%;
+  background: #0e0e0e;
+  padding: 5px 0;
+  margin-bottom: 20px;
+}
+button {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 15px;
+  border-radius: 10px 10px 20px 20px;
+  display: block;
+  font-size: 16px;
+  background-color: #fff;
+  color: #090909;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s linear;
+}
+button:hover {
+  background-color: #f9f9f9;
+}
+header .wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+}
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+}
+nav ul li {
+  display: flex;
+  flex-direction: column;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 25px;
+}
+nav li:last-child a {
+  padding-right: 0;
+}
+#timeHome {
+  min-height: 85vh;
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+}
+#display {
+  padding: 20px;
+  background: transparent;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 50px;
+  border: 3px solid rgb(14, 14, 14);
+  margin: 20px 0;
+  color: #0e0e0e;
+}

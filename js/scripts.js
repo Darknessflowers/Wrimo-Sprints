@@ -1,34 +1,45 @@
-// let tenMinData = [];
-// let fifteenMinData = [];
-// let twentyMinData = [];
-// let thirtyMinData = [];
-// let customMindata = [];
 let timeLeft = 0;
-let timerForm = document.querySelector('form');
-let timerValue = document.querySelector("input[name='sprint-length']:checked");
-let timeLeftSeconds = timerValue.value * 60;
+// let timerValue = document.querySelector("input[name='sprint-length']:checked");
+let timerValue = document.querySelector('.timeWrap .selected').getAttribute('aria-time');
+let timeSelected = document.querySelectorAll('.timeWrap button');
+let timeLeftSeconds = timerValue * 60;
 let timerDisplay = document.querySelector('.timeDisplay');
 let startNextMinTimer;
 let startTimerBtn = document.querySelector('#startNow');
 let startNextBtn =  document.querySelector('#startNext');
 let resetBtn =  document.querySelector('#reset');
-let requestPermissionBtn = document.querySelector('#requestPermission');
 let notificationImg = './favicon.png';
 let notificationText = 'Time up!';
 let isTimerRunning = false;
 var timer;
+let wordsModal = document.querySelector('#modal');
+let ignoreModal = document.querySelector('.noWords');
+let startTime = 0;
+let modalForm = document.querySelector('#modal form');
+
+var wait = (amount = 0) => new Promise(resolve => setTimeout(resolve, amount));
+
+auth.onAuthStateChanged(user => {
+  debugger;
+  if(user) {
+  setupUi(user);
+  }
+  else {
+    setupUi(user);
+  }
+});
 
 function startTimer(seconds) {
   // debugger;
   let ms = seconds * 1000;
-  let startTime = new Date().getTime();
+  startTime = new Date().getTime();
   console.log(startTime);
   isTimerRunning = true;
   startTimerBtn.innerText = 'Pause';
   timer = setInterval(() => {
     timeLeft = Math.max(0, ms - (new Date().getTime()-startTime));
     updateDisplay();
-    console.log(timeLeft);
+    // console.log(timeLeft);
     if(timeLeft === 0) {
       console.log('time is up');
       notificationText = 'Time up!';
@@ -36,6 +47,11 @@ function startTimer(seconds) {
       startTimerBtn.innerText = 'Start';
       clearInterval(timer);
       isTimerRunning = false;
+      auth.onAuthStateChanged(user => {
+        if(user) {
+        howManyWords();
+        }
+      });
     }
   }, 250);
 }
@@ -70,6 +86,8 @@ function resetTimer() {
   isTimerRunning = false;
   timeLeft = 0;
   startTimerBtn.innerText = 'Start';
+  startNextBtn.style.display = 'block';
+
   // updateDisplay();
   updateDisplayBeforeStart();
 }
@@ -78,16 +96,17 @@ function startNextMin() {
   let currentTime = new Date();
   let seconds = currentTime.getSeconds();
   console.log(seconds);
-  startNextBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
+  startNextBtn.style.display = 'none';
+  startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
   startNextMinTimer = setInterval(() => {
     currentTime = new Date();
     seconds = currentTime.getSeconds();
-    startNextBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
+    startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
     if(seconds === 0) {
         console.log('Starting timer!');
         notificationText = 'Start writing!';
         playNotification();
-        startNextBtn.innerText = `Write!`;
+        // startNextBtn.innerText = `Write!`;
         clearInterval(startNextMinTimer);
         startTimer(timeLeftSeconds);
     }
@@ -98,34 +117,38 @@ function playNotification() {
   new Notification('Writing Sprints Timer', { body: notificationText, vibrate: [200, 100, 200], icon: notificationImg });
 }
 
+//saving data
+async function sendToDb(e) {
+  e.preventDefault();
 
-function scheduleTimer() {
+  db.collection('sprints-data').add({
+    sprLength: parseInt(timerValue),
+    words: parseInt(modalForm.words.value),
+    date: startTime
+  });
 
+  modalForm.words.value = '';
+ 
+  await wait(1000);
+  closeModal();
+}
+function howManyWords() {
+  wordsModal.classList.add('open');
+  ignoreModal.addEventListener('click', closeModal);
+  modalForm.addEventListener('submit', sendToDb);
 }
 
-// function updateDisplayBeforeStart() {
-//   // debugger;
-//   // const msLeft = timeLeft;
-//   const secondsLeft = timeLeftSeconds;
-//   let displayResult = '';
-//   const seconds = secondsLeft % 60;
-//   const minutes = parseInt((secondsLeft/60) % 60);
-//   let hours = parseInt(secondsLeft/3600);
-//     //add zeros if less than ten
-//     function addLeadingZeros(time) {
-//       return time < 10 ? `0${time}` : time;
-//     }
-//   if(hours > 0) {
-//     displayResult += `${hours}:`;
-//   }
-//     displayResult += `${addLeadingZeros(minutes)}:${addLeadingZeros(seconds)}`;
-//     timerDisplay.innerText = displayResult;
-// }
+function closeModal() {
+  wordsModal.classList.remove('open');
+}
 
 function updateDisplayBeforeStart() {
-  switch(timerValue.value) {
+  switch(timerValue) {
     case '1':
       timerDisplay.innerText = "01:00";
+    break;
+    case '5':
+      timerDisplay.innerText = "05:00";
     break;
     case '10':
       timerDisplay.innerText = "10:00";
@@ -157,6 +180,7 @@ function updateDisplay() {
 
 startTimerBtn.addEventListener('click', function() {
   if(isTimerRunning === false) {
+    startNextBtn.style.display = 'none';
     if(timeLeft === 0) {
     startTimer(timeLeftSeconds);
     }
@@ -168,71 +192,36 @@ startTimerBtn.addEventListener('click', function() {
   }
 });
 
-function checkNotificationPromise() {
-  try {
-    Notification.requestPermission().then();
-  } catch(e) {
-    return false;
-  }
-
-  return true;
+function handleTime(e) {
+  // debugger;
+  console.log(e.currentTarget.getAttribute('aria-time'));
+  timeSelected.forEach(button => button.classList.remove('selected'));
+  e.currentTarget.classList.add('selected');
+  timerValue = document.querySelector('.timeWrap .selected').getAttribute('aria-time');
+  timeLeftSeconds = timerValue * 60;
+  // console.log(timeLeftSeconds);
+  updateDisplayBeforeStart();
 }
 
-function askNotificationPermission() {
-  // function to actually ask the permissions
-  function handlePermission(permission) {
-    // Whatever the user answers, we make sure Chrome stores the information
-    if(!('permission' in Notification)) {
-      Notification.permission = permission;
-    }
-    // set the button to shown or hidden, depending on what the user answers
-    if(Notification.permission === 'denied' || Notification.permission === 'default') {
-        requestPermissionBtn.style.display = 'block';
-    } else {
-      requestPermissionBtn.style.display = 'none';
-    }
-  }
-  // Check if the browser supports notifications
-  if (!('Notification' in window)) {
-    console.log("This browser does not support notifications.");
-    requestPermissionBtn.style.display = 'none';
-  } else {
-    if(checkNotificationPromise()) {
-      Notification.requestPermission()
-      .then((permission) => {
-        handlePermission(permission);
-      })
-    } else {
-      Notification.requestPermission(function(permission) {
-        handlePermission(permission);
-      });
-    }
-  }
-}
 
 function init() {
-  timerForm.addEventListener('change', function() {
-    // update timer value when radio button is selected
-    timerValue = document.querySelector("input[name='sprint-length']:checked");
-    console.log(timerValue.value);
-    //convert min to seconds
-    timeLeftSeconds = timerValue.value * 60;
-    updateDisplayBeforeStart();
+  // document.querySelectorAll('[data-type]').forEach(draw);
+  auth.onAuthStateChanged(user => {
+    if(user) {
+      setupUi(user);
+    }
+    else {
+      setupUi(user);
+    }
   });
-
-    // Ask for permission to show notifications
-  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    requestPermissionBtn.style.display = 'none';
-  } else {
-    requestPermissionBtn.addEventListener('click', askNotificationPermission);
-  }
-
+  
+  timeSelected.forEach(button => {
+    button.addEventListener('click', handleTime);
+  });
   updateDisplayBeforeStart();
 
   startNextBtn.addEventListener('click', startNextMin);
   resetBtn.addEventListener('click', resetTimer);
-  requestPermissionBtn.addEventListener('click', askNotificationPermission);
 }
 
 init(); 
-

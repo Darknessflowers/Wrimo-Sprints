@@ -37,8 +37,13 @@ function renderSprint(data, location) {
             <th>Date</th>
             <th>Length</th>
             <th>Words</th>
+            <th>WPM</th>
     </tr>`;
+
     data.forEach(doc => {
+      let words = doc.data().words;
+      let length = doc.data().sprLength;
+      let wpm = words/length;
       let dateReadable = new Date(doc.data().date);
       const sprintInfo = doc.data();
       const row = `
@@ -46,6 +51,7 @@ function renderSprint(data, location) {
       <td>${dateReadable.getDate()} ${months[dateReadable.getMonth()]} ${dateReadable.getFullYear()} </td>
       <td>${doc.data().sprLength} min</td>
       <td>${doc.data().words}</td>
+      <td>${wpm}</td>
       </tr>
       `;
       html += row;

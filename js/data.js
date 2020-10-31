@@ -43,7 +43,7 @@ function renderSprint(data, location) {
     data.forEach(doc => {
       let words = doc.data().words;
       let length = doc.data().sprLength;
-      let wpm = words/length;
+      let wpm = (Math.round(words/length).toFixed(2));
       let dateReadable = new Date(doc.data().date);
       const sprintInfo = doc.data();
       const row = `

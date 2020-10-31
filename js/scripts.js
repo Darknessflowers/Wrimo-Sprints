@@ -16,11 +16,23 @@ let wordsModal = document.querySelector('#modal');
 let ignoreModal = document.querySelector('.noWords');
 let startTime = 0;
 let modalForm = document.querySelector('#modal form');
+let finishedPomodoroSound = new Audio('./sounds/cat-meow.wav');
+
 
 var wait = (amount = 0) => new Promise(resolve => setTimeout(resolve, amount));
 
+async function playMeow() {
+  try {
+    await finishedPomodoroSound.play();
+    // playButton.classList.add("playing");
+    // playButton.style.display = 'none';
+  } catch(err) {
+    console.log(err);
+    // playButton.classList.remove("playing");
+  }
+}
+
 auth.onAuthStateChanged(user => {
-  debugger;
   if(user) {
   setupUi(user);
   }
@@ -44,6 +56,7 @@ function startTimer(seconds) {
       console.log('time is up');
       notificationText = 'Time up!';
       playNotification();
+      playMeow();
       startTimerBtn.innerText = 'Start';
       clearInterval(timer);
       isTimerRunning = false;
@@ -107,6 +120,7 @@ function startNextMin() {
         console.log('Starting timer!');
         notificationText = 'Start writing!';
         playNotification();
+        playMeow();
         // startNextBtn.innerText = `Write!`;
         clearInterval(startNextMinTimer);
         startTimer(timeLeftSeconds);

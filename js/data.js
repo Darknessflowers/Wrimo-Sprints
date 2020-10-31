@@ -7,23 +7,51 @@ const tableTen = document.querySelector('.sprintDataTen');
 
 let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function renderSprint(doc, location) {
-let tr = document.createElement('tr');
-let words = document.createElement('td');
-let dateFormatted = document.createElement('td');
-let sprLength = document.createElement('td');
-let dateReadable = new Date(doc.data().date);
+// function renderSprint(doc, location) {
+// let toAppend = location.querySelector('.tableTop');
+// let tr = document.createElement('tr');
+// let words = document.createElement('td');
+// let dateFormatted = document.createElement('td');
+// let sprLength = document.createElement('td');
+// let dateReadable = new Date(doc.data().date);
 
-tr.setAttribute('data-id', doc.id);
-words.textContent = doc.data().words;
-dateFormatted.textContent = `${dateReadable.getDate()} ${months[dateReadable.getMonth()]} ${dateReadable.getFullYear()}`;
-sprLength.textContent = doc.data().sprLength + ' min';
+// tr.setAttribute('data-id', doc.id);
+// tr.classList.add('sprintData');
+// words.textContent = doc.data().words;
+// dateFormatted.textContent = `${dateReadable.getDate()} ${months[dateReadable.getMonth()]} ${dateReadable.getFullYear()}`;
+// sprLength.textContent = doc.data().sprLength + ' min';
 
-tr.appendChild(dateFormatted);
-tr.appendChild(sprLength);
-tr.appendChild(words);
+// tr.appendChild(dateFormatted);
+// tr.appendChild(sprLength);
+// tr.appendChild(words);
 
-location.appendChild(tr); 
+// let child = toAppend.firstElementChild;
+// console.log(toAppend);
+// toAppend.appendChild(tr); 
+// }
+
+function renderSprint(data, location) {
+  if(data.length) {
+    let html = 
+    `<tr>
+            <th>Date</th>
+            <th>Length</th>
+            <th>Words</th>
+    </tr>`;
+    data.forEach(doc => {
+      let dateReadable = new Date(doc.data().date);
+      const sprintInfo = doc.data();
+      const row = `
+      <tr>
+      <td>${dateReadable.getDate()} ${months[dateReadable.getMonth()]} ${dateReadable.getFullYear()} </td>
+      <td>${doc.data().sprLength} min</td>
+      <td>${doc.data().words}</td>
+      </tr>
+      `;
+      html += row;
+    });
+    location.innerHTML = html;
+  }
 }
 
 // listen for auth status changes
@@ -33,18 +61,12 @@ auth.onAuthStateChanged(user => {
     //user exists
     console.log('user logged in :', user);
     // getting data      
-      db.collection('sprints-data').orderBy("date", "desc").get().then((snapshot) => {
-        snapshot.docs.forEach(doc => {
-          // console.log(doc.data());
-          renderSprint(doc, table);
-        })
+      db.collection('sprints-data').orderBy("date", "desc").onSnapshot((snapshot) => {
+        renderSprint(snapshot.docs, table);
       });
 
-      db.collection('sprints-data').where("sprLength", "==", 10).orderBy("date", "desc").get().then((snapshot) => {
-        snapshot.docs.forEach(doc => {
-          // console.log(doc.data());
-          renderSprint(doc, tableTen);
-        })
+      db.collection('sprints-data').where("sprLength", "==", 10).orderBy("date", "desc").onSnapshot((snapshot) => {
+        renderSprint(snapshot.docs, tableTen);
       });   
   } else {
     setupUi(user);

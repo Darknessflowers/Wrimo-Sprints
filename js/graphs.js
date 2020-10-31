@@ -153,7 +153,7 @@ auth.onAuthStateChanged(user => {
     });
 
     // 10 MIN CHART
-    db.collection('sprints-data').where("sprLength", "==", 10).orderBy("date", "desc").get().then((snapshot) => {
+    db.collection('sprints-data').where("sprLength", "==", 10).orderBy("date", "desc").onSnapshot((snapshot) => {
       let chart = document.querySelector('#chart-ten');
       console.log(snapshot.size);
       if(snapshot.size) {

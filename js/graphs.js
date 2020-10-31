@@ -171,11 +171,11 @@ auth.onAuthStateChanged(user => {
 
      // 15 MIN CHART
      db.collection('sprints-data').where("sprLength", "==", 15).orderBy("date", "desc").get().then((snapshot) => {
-      let chart = document.querySelector('#chart-ten');
+      let chart = document.querySelector('#chart-fifteen');
       if(snapshot.size) {
         chart.classList.remove('hidden');
         snapshot.docs.forEach(doc => {
-          renderChart(doc, fifteenMinWordsData, fifteenMinDateData, 'ten');
+          renderChart(doc, fifteenMinWordsData, fifteenMinDateData, 'fifteen');
         })
         loadChart('fifteen', fifteenMinWordsData, fifteenMinDateData);
       } else {
@@ -186,11 +186,11 @@ auth.onAuthStateChanged(user => {
 
     // 20 MIN CHART
     db.collection('sprints-data').where("sprLength", "==", 20).orderBy("date", "desc").get().then((snapshot) => {
-      let chart = document.querySelector('#chart-ten');
+      let chart = document.querySelector('#chart-twenty');
       if(snapshot.size) {
         chart.classList.remove('hidden');
         snapshot.docs.forEach(doc => {
-          renderChart(doc, twentyMinWordsData, twentyMinDateData, 'ten');
+          renderChart(doc, twentyMinWordsData, twentyMinDateData, 'twenty');
         })
         loadChart('twenty', twentyMinWordsData, twentyMinDateData);
       } else {
@@ -201,11 +201,11 @@ auth.onAuthStateChanged(user => {
 
     // 30 MIN CHART
     db.collection('sprints-data').where("sprLength", "==", 30).orderBy("date", "desc").get().then((snapshot) => {
-      let chart = document.querySelector('#chart-ten');
+      let chart = document.querySelector('#chart-thirty');
       if(snapshot.size) {
         chart.classList.remove('hidden');
         snapshot.docs.forEach(doc => {
-          renderChart(doc, thirtyMinWordsData, thirtyMinDateData, 'ten');
+          renderChart(doc, thirtyMinWordsData, thirtyMinDateData, 'thirty');
         })
         loadChart('thirty', thirtyMinWordsData, thirtyMinDateData);
       } else {

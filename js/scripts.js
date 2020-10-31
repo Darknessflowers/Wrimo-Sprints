@@ -101,8 +101,8 @@ function startNextMin() {
   startNextMinTimer = setInterval(() => {
     currentTime = new Date();
     seconds = currentTime.getSeconds();
-    startTimerBtn.innerText = `It is ${seconds} seconds`;
-    // startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
+    // startTimerBtn.innerText = `It is ${seconds} seconds`;
+    startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
     if(seconds === 0) {
         console.log('Starting timer!');
         notificationText = 'Start writing!';

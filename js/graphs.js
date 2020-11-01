@@ -137,6 +137,21 @@ auth.onAuthStateChanged(user => {
     //! future: get user. User is associated to a collection (stored in array?)
     //! get name of collection and assign to variable. pull through when grabbing data
 
+      // All data CHART
+      // db.collection('sprints-data').orderBy("date", "desc").get().then((snapshot) => {
+      //   let chart = document.querySelector('#chart-all');
+      //   if(snapshot.size) {
+      //     chart.classList.remove('hidden');
+      //     snapshot.docs.forEach(doc => {
+      //     renderChart(doc, allWordsData, allDateData, 'all');
+      //     })
+      //     loadChart('all', allWordsData, allDateData);
+      //   } else {
+      //     document.querySelector('#chart-all').innerHTML = '';
+      //     document.querySelector('#chart-all').style.display = 'none';
+      //   }
+      // });
+
     // 5 MIN CHART
     db.collection('sprints-data').where("sprLength", "==", 5).orderBy("date", "desc").get().then((snapshot) => {
       let chart = document.querySelector('#chart-ten');

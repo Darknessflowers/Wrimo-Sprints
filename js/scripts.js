@@ -111,6 +111,7 @@ function startNextMin() {
   console.log(seconds);
   startNextBtn.style.display = 'none';
   startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
+  startTimerBtn.removeEventListener('click', pauseOrResume);
   startNextMinTimer = setInterval(() => {
     currentTime = new Date();
     seconds = currentTime.getSeconds();
@@ -119,11 +120,20 @@ function startNextMin() {
     if(seconds === 0) {
         console.log('Starting timer!');
         notificationText = 'Start writing!';
-        playNotification();
+        try {
+          if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            console.log('Not a desktop device. No notifications.')
+          } else {
+            playNotification();
+          }
+        } catch(err) {
+          console.log(err);
+        }
         playMeow();
         // startNextBtn.innerText = `Write!`;
         clearInterval(startNextMinTimer);
         startTimer(timeLeftSeconds);
+        startTimerBtn.addEventListener('click', pauseOrResume);
     }
   }, 1000);
 }
@@ -191,9 +201,7 @@ function updateDisplay() {
   timerDisplay.innerHTML = min+":"+seconds;
 }
 
-
-
-startTimerBtn.addEventListener('click', function() {
+function pauseOrResume() {
   if(isTimerRunning === false) {
     startNextBtn.style.display = 'none';
     if(timeLeft === 0) {
@@ -205,7 +213,7 @@ startTimerBtn.addEventListener('click', function() {
   } else {
     pauseTimer();
   }
-});
+}
 
 function handleTime(e) {
   // debugger;
@@ -221,14 +229,14 @@ function handleTime(e) {
 
 function init() {
   // document.querySelectorAll('[data-type]').forEach(draw);
-  auth.onAuthStateChanged(user => {
-    if(user) {
-      setupUi(user);
-    }
-    else {
-      setupUi(user);
-    }
-  });
+  // auth.onAuthStateChanged(user => {
+  //   if(user) {
+  //     setupUi(user);
+  //   }
+  //   else {
+  //     setupUi(user);
+  //   }
+  // });
   
   timeSelected.forEach(button => {
     button.addEventListener('click', handleTime);
@@ -238,5 +246,5 @@ function init() {
   startNextBtn.addEventListener('click', startNextMin);
   resetBtn.addEventListener('click', resetTimer);
 }
-
+startTimerBtn.addEventListener('click', pauseOrResume);
 init(); 

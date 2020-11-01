@@ -15,7 +15,7 @@ let thirtyMinDateData = [];
 
 let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function loadChart(num, wordsArray, dateArray) {
+function loadChart(num, wordsArray, dateArray, aspectRatio = true) {
   // console.log(`#${num}Chart`);
   const ctx = document.querySelector(`#${num}Chart`);
 // const ctx = document.getElementById('tenChart').getContext('2d');
@@ -111,7 +111,8 @@ function loadChart(num, wordsArray, dateArray) {
               }
           }]
       },
-      
+      // responsive: true,
+      maintainAspectRatio: aspectRatio,
   }
 });
 }
@@ -138,19 +139,19 @@ auth.onAuthStateChanged(user => {
     //! get name of collection and assign to variable. pull through when grabbing data
 
       // All data CHART
-      // db.collection('sprints-data').orderBy("date", "desc").get().then((snapshot) => {
-      //   let chart = document.querySelector('#chart-all');
-      //   if(snapshot.size) {
-      //     chart.classList.remove('hidden');
-      //     snapshot.docs.forEach(doc => {
-      //     renderChart(doc, allWordsData, allDateData, 'all');
-      //     })
-      //     loadChart('all', allWordsData, allDateData);
-      //   } else {
-      //     document.querySelector('#chart-all').innerHTML = '';
-      //     document.querySelector('#chart-all').style.display = 'none';
-      //   }
-      // });
+      db.collection('sprints-data').orderBy("date", "desc").get().then((snapshot) => {
+        let chart = document.querySelector('#chart-all');
+        if(snapshot.size) {
+          chart.classList.remove('hidden');
+          snapshot.docs.forEach(doc => {
+          renderChart(doc, allWordsData, allDateData, 'all');
+          })
+          loadChart('all', allWordsData, allDateData, false);
+        } else {
+          document.querySelector('#chart-all').innerHTML = '';
+          document.querySelector('#chart-all').style.display = 'none';
+        }
+      });
 
     // 5 MIN CHART
     db.collection('sprints-data').where("sprLength", "==", 5).orderBy("date", "desc").get().then((snapshot) => {

@@ -154,7 +154,7 @@ auth.onAuthStateChanged(user => {
 
     // 5 MIN CHART
     db.collection('sprints-data').where("sprLength", "==", 5).orderBy("date", "desc").get().then((snapshot) => {
-      let chart = document.querySelector('#chart-ten');
+      let chart = document.querySelector('#chart-five');
       if(snapshot.size) {
         chart.classList.remove('hidden');
         snapshot.docs.forEach(doc => {

@@ -100,7 +100,7 @@ function resetTimer() {
   timeLeft = 0;
   startTimerBtn.innerText = 'Start';
   startNextBtn.style.display = 'block';
-
+  startTimerBtn.addEventListener('click', pauseOrResume);
   // updateDisplay();
   updateDisplayBeforeStart();
 }

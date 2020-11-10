@@ -234,7 +234,7 @@ auth.onAuthStateChanged(user => {
     // hide everything if logged out
     console.log('user logged out');
     setupUi(user);
-    document.querySelector('#bodyWrap').innerHTML = `
+    document.querySelector('.wrap').innerHTML = `
     <h1>Graphs</h1>
     <p>You need to be logged in to view this data.</p>`;
   }

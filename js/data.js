@@ -77,7 +77,7 @@ auth.onAuthStateChanged(user => {
   } else {
     setupUi(user);
     console.log('user logged out');
-    document.querySelector('#bodyWrap').innerHTML = `
+    document.querySelector('.wrap').innerHTML = `
     <h1>Sprint Data</h1>
     
     <p>You need to be logged in to view this data.</p>`;

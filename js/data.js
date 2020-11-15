@@ -83,9 +83,3 @@ auth.onAuthStateChanged(user => {
     <p>You need to be logged in to view this data.</p>`;
   }
 });
-
-// var myLineChart = new Chart(ctx, {
-//   type: 'line',
-//   data: data,
-//   options: options
-// });

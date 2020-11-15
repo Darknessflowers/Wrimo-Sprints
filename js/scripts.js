@@ -24,14 +24,12 @@ var wait = (amount = 0) => new Promise(resolve => setTimeout(resolve, amount));
 async function playMeow() {
   try {
     await finishedPomodoroSound.play();
-    // playButton.classList.add("playing");
-    // playButton.style.display = 'none';
   } catch(err) {
     console.log(err);
-    // playButton.classList.remove("playing");
   }
 }
 
+//if user logs in or logs out change the display
 auth.onAuthStateChanged(user => {
   if(user) {
   setupUi(user);
@@ -42,7 +40,7 @@ auth.onAuthStateChanged(user => {
 });
 
 function startTimer(seconds) {
-  // debugger;
+  console.log('timer is starting');
   let ms = seconds * 1000;
   startTime = new Date().getTime();
   console.log(startTime);
@@ -51,7 +49,6 @@ function startTimer(seconds) {
   timer = setInterval(() => {
     timeLeft = Math.max(0, ms - (new Date().getTime()-startTime));
     updateDisplay();
-    // console.log(timeLeft);
     if(timeLeft === 0) {
       console.log('time is up');
       notificationText = 'Time up!';
@@ -108,7 +105,7 @@ function resetTimer() {
 function startNextMin() {
   let currentTime = new Date();
   let seconds = currentTime.getSeconds();
-  console.log(seconds);
+  console.log(`starting seconds is ${seconds}`);
   startNextBtn.style.display = 'none';
   startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
   startTimerBtn.removeEventListener('click', pauseOrResume);
@@ -117,6 +114,7 @@ function startNextMin() {
     seconds = currentTime.getSeconds();
     // startTimerBtn.innerText = `It is ${seconds} seconds`;
     startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
+    console.log(seconds);
     if(seconds === 0) {
         console.log('Starting timer!');
         notificationText = 'Start writing!';
@@ -125,17 +123,19 @@ function startNextMin() {
             console.log('Not a desktop device. No notifications.')
           } else {
             playNotification();
+            playMeow();
           }
         } catch(err) {
           console.log(err);
         }
-        playMeow();
         // startNextBtn.innerText = `Write!`;
+        console.log('Still starting timer!');
         clearInterval(startNextMinTimer);
         startTimer(timeLeftSeconds);
         startTimerBtn.addEventListener('click', pauseOrResume);
+        console.log('Back t normal timer!');
     }
-  }, 1000);
+  }, 250);
 }
 
 function playNotification() {

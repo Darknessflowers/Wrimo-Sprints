@@ -131,7 +131,7 @@ function startNextMin() {
         startTimerBtn.addEventListener('click', pauseOrResume);
         console.log('Back t normal timer!');
     }
-  }, 250);
+  }, 100);
   console.log(`starting seconds is ${seconds}`);
   startNextBtn.style.display = 'none';
   startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;

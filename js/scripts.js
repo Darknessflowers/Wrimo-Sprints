@@ -105,10 +105,6 @@ function resetTimer() {
 function startNextMin() {
   let currentTime = new Date();
   let seconds = currentTime.getSeconds();
-  console.log(`starting seconds is ${seconds}`);
-  startNextBtn.style.display = 'none';
-  startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
-  startTimerBtn.removeEventListener('click', pauseOrResume);
   startNextMinTimer = setInterval(() => {
     currentTime = new Date();
     seconds = currentTime.getSeconds();
@@ -136,10 +132,18 @@ function startNextMin() {
         console.log('Back t normal timer!');
     }
   }, 250);
+  console.log(`starting seconds is ${seconds}`);
+  startNextBtn.style.display = 'none';
+  startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
+  startTimerBtn.removeEventListener('click', pauseOrResume);
 }
 
 function playNotification() {
-  new Notification('Writing Sprints Timer', { body: notificationText, vibrate: [200, 100, 200], icon: notificationImg });
+  try {
+    new Notification('Writing Sprints Timer', { body: notificationText, vibrate: [200, 100, 200], icon: notificationImg });
+  } catch(err) {
+    console.log(err);
+  }
 }
 
 //saving data

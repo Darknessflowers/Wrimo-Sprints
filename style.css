@@ -44,7 +44,7 @@ header {
 button {
   /* border: 1px solid rgba(255, 255, 255, 0.4); */
   border: none;
-  padding: 15px 25px;
+  padding: 15px 17px;
   /* border-radius: 10px 10px 20px 20px; */
   border-radius: 20px;
   display: block;
@@ -327,6 +327,76 @@ table tr:nth-child(even) {
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 40px;
 }
+#customOuterWrap {
+  position: relative;
+  /* margin-top: 15px; */
+}
+#customWrap {
+  background: #424242;
+  padding: 8px;
+  border-radius: 25px;
+}
+#customLength {
+  border: none;
+  border-radius: 20px 0 0 20px;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background: #fff;
+  color: #000;
+  border-right: 1px solid #d2d2d2;
+  box-shadow: 1px 2px 0px rgba(168, 168, 168, 0.3);
+}
+#customWrap input,
+#customWrap button {
+  margin: 0;
+}
+#customWrap button:hover {
+  border-width: 0 !important;
+}
+#customWrap {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  /* margin-top: 15px; */
+}
+#customOuterWrap {
+  /* height: 0; */
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: all 0.5s linear;
+  pointer-events: none;
+  padding-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  height: auto;
+  position: absolute;
+  right: 0;
+}
+#customOuterWrap.reveal {
+  pointer-events: all;
+  transform: scaleY(1);
+}
+#customWrap button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+#customWrap::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: 30px;
+  width: 0;
+  height: 0;
+  display: block;
+  /* background: #cac4cc; */
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #424242;
+}
+#timerContainer {
+  position: relative;
+}
+
 @media only screen and (max-width: 1060px) {
   .wrap {
     max-width: 90%;

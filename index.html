@@ -93,6 +93,15 @@
           <button aria-time="15">15 min</button>
           <button aria-time="20">20 min</button>
           <button aria-time="30">30 min</button>
+          <button class="customTime" aria-time="">Custom</button>
+        </div>
+        <div id="customOuterWrap">
+        <div id="customWrap">
+          <form id="customLengthForm">
+            <input type="number" name="custom" id="customLength">
+          </form>
+          <button type="submit" form="customLengthForm">Set length</button>
+        </div>
         </div>
 
         <div id="display">
@@ -106,6 +115,7 @@
       </div>
     </div>
 
+    <!-- WORDS MODAL -->
     <div id="modal">
       <div class="innerModal">
         <form>

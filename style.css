@@ -58,6 +58,22 @@ button {
   box-shadow: 1px 2px 0px rgba(168, 168, 168, 0.3);
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  border: 3px solid transparent;
+}
+
+.selected:disabled:hover {
+  border: 3px solid #fff;
+}
+
+.customTime:disabled:hover {
+  background: #fff;
+}
 header .wrap {
   max-width: 1140px;
   margin: 0 auto;
@@ -327,16 +343,16 @@ table tr:nth-child(even) {
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 40px;
 }
-#customOuterWrap {
+.timerDropdown {
   position: relative;
   /* margin-top: 15px; */
 }
-#customWrap {
+.timerDropdownWrap {
   background: #424242;
   padding: 8px;
   border-radius: 25px;
 }
-#customLength {
+.timerDropdownWrap .timerDropdownForm input {
   border: none;
   border-radius: 20px 0 0 20px;
   height: 100%;
@@ -346,21 +362,28 @@ table tr:nth-child(even) {
   color: #000;
   border-right: 1px solid #d2d2d2;
   box-shadow: 1px 2px 0px rgba(168, 168, 168, 0.3);
+  width: 100px;
 }
-#customWrap input,
-#customWrap button {
+.timerDropdownWrap input,
+.timerDropdownWrap button {
   margin: 0;
 }
-#customWrap button:hover {
+.timerDropdownWrap button:hover {
   border-width: 0 !important;
 }
-#customWrap {
+.timerDropdownWrap {
   display: grid;
-  grid-template-columns: 3fr 1fr;
-  /* margin-top: 15px; */
+  /* grid-template-columns: 3fr 1fr; */
+  grid-template-columns: auto 1fr;
+  /* justify-items: end; */
 }
 #customOuterWrap {
   /* height: 0; */
+
+  position: absolute;
+  right: 0;
+}
+.timerDropdown {
   transform: scaleY(0);
   transform-origin: top;
   transition: all 0.5s linear;
@@ -369,22 +392,19 @@ table tr:nth-child(even) {
   display: flex;
   justify-content: flex-end;
   height: auto;
-  position: absolute;
-  right: 0;
 }
-#customOuterWrap.reveal {
+.timerDropdown.reveal {
   pointer-events: all;
   transform: scaleY(1);
 }
-#customWrap button {
+.timerDropdown button {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-#customWrap::before {
+.timerDropdown::before {
   content: "";
   position: absolute;
   top: -1px;
-  right: 30px;
   width: 0;
   height: 0;
   display: block;
@@ -392,6 +412,13 @@ table tr:nth-child(even) {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   border-bottom: 15px solid #424242;
+}
+#customOuterWrap::before {
+  right: 30px;
+}
+
+#scheduleOuterWrap::before {
+  right: 140px;
 }
 #timerContainer {
   position: relative;

@@ -21,8 +21,24 @@ let customTimeBtn = document.querySelector('.customTime');
 let customFormContainer = document.querySelector('#customOuterWrap');
 let customForm = customFormContainer.querySelector('form');
 
-function showCustomForm() {
-  customFormContainer.classList.toggle('reveal');
+async function showCustomForm() {
+  if(customFormContainer.classList.contains('reveal')) {
+    customFormContainer.classList.remove('reveal');
+    window.removeEventListener('click', handleClickOutside);
+  } else {
+    customFormContainer.classList.add('reveal');
+    await wait(250);
+    window.addEventListener('click', handleClickOutside);
+  }
+}
+
+function handleClickOutside(e) {
+  let outside = e.target.closest('#customOuterWrap');
+  console.log(outside);
+  if(outside === null) {
+    customFormContainer.classList.remove('reveal');
+    window.removeEventListener('click', handleClickOutside);
+  }
 }
 
 function handleCustomForm(e) {
@@ -35,6 +51,7 @@ function handleCustomForm(e) {
   console.log(timeLeftSeconds);
   updateDisplayBefore(customLength);
   customFormContainer.classList.remove('reveal');
+  window.removeEventListener('click', handleClickOutside);
 }
 
 var wait = (amount = 0) => new Promise(resolve => setTimeout(resolve, amount));
@@ -58,6 +75,10 @@ auth.onAuthStateChanged(user => {
 });
 
 function startTimer(seconds) {
+  timeSelected.forEach(btn => {
+      btn.disabled = true;
+      btn.removeEventListener('click', handleTime);
+  });
   console.log('timer is starting');
   let ms = seconds * 1000;
   startTime = new Date().getTime();
@@ -72,6 +93,10 @@ function startTimer(seconds) {
       notificationText = 'Time up!';
       playNotification();
       playMeow();
+      timeSelected.forEach(btn => {
+        btn.disabled = false;
+        btn.addEventListener('click', handleTime);
+      });
       startTimerBtn.innerText = 'Start';
       clearInterval(timer);
       isTimerRunning = false;
@@ -113,6 +138,10 @@ function resetTimer() {
   clearInterval(timer);
   isTimerRunning = false;
   timeLeft = 0;
+  timeSelected.forEach(btn => {
+    btn.disabled = false;
+    btn.addEventListener('click', handleTime);
+  });
   startTimerBtn.innerText = 'Start';
   startNextBtn.style.display = 'block';
   startTimerBtn.addEventListener('click', pauseOrResume);
@@ -336,10 +365,10 @@ function handleTime(e) {
   e.currentTarget.classList.add('selected');
   timerValue = document.querySelector('.timeWrap .selected').getAttribute('aria-time');
  
-  timeLeftSeconds = timerValue * 60;
-  // console.log(timeLeftSeconds);
+  if(!e.currentTarget.classList.contains('customTime')) {
   updateDisplayBefore(timerValue);
-  // updateDisplayBeforeStart();
+  timeLeftSeconds = timerValue * 60;
+  }
 }
 
 

@@ -98,7 +98,7 @@
         <div id="customOuterWrap" class="timerDropdown">
         <div id="customWrap" class="timerDropdownWrap">
           <form id="customLengthForm" class="timerDropdownForm">
-            <input type="number" min="1" step="1" name="custom" id="customLength">
+            <input type="number" placeholder="25" min="1" step="1" name="custom" id="customLength" required>
           </form>
           <button type="submit" form="customLengthForm">Set length</button>
         </div>
@@ -110,13 +110,13 @@
         <div class="buttonRow">
           <button id="startNow" class="black">Start</button>
           <button id="startNext" class="grey darken-4">Start next min</button>
-          <button id="startNext" class="grey darken-3">Schedule</button>
+          <button id="startSchedule" class="grey darken-3">Schedule</button>
           <button id="reset" class="grey darken-2">Cancel</button>
         </div>
         <div id="scheduleOuterWrap" class="timerDropdown">
           <div id="scheduleWrap" class="timerDropdownWrap">
             <form id="scheduleLengthForm" class="timerDropdownForm">
-              <input type="number" min="1" step="1" name="custom" id="scheduleLength">
+              <input type="number" placeholder=":15" min="1" step="1" name="schedule" id="scheduleLength" required>
             </form>
             <button type="submit" form="scheduleLengthForm">Set start min</button>
           </div>

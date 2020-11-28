@@ -18,8 +18,11 @@ let startTime = 0;
 let modalForm = document.querySelector('#modal form');
 let finishedPomodoroSound = new Audio('./sounds/cat-meow.wav');
 let customTimeBtn = document.querySelector('.customTime');
+let scheduleTimeBtn = document.querySelector('#startSchedule');
 let customFormContainer = document.querySelector('#customOuterWrap');
+let scheduleFormContainer = document.querySelector('#scheduleOuterWrap');
 let customForm = customFormContainer.querySelector('form');
+let scheduleForm = scheduleFormContainer .querySelector('form');
 
 async function showCustomForm() {
   if(customFormContainer.classList.contains('reveal')) {
@@ -32,26 +35,49 @@ async function showCustomForm() {
   }
 }
 
+async function showScheduleForm() {
+  if(scheduleFormContainer.classList.contains('reveal')) {
+    scheduleFormContainer.classList.remove('reveal');
+    window.removeEventListener('click', handleClickOutsideSchedule);
+  } else {
+    scheduleFormContainer.classList.add('reveal');
+    await wait(250);
+    window.addEventListener('click', handleClickOutsideSchedule);
+  }
+}
+
 function handleClickOutside(e) {
   let outside = e.target.closest('#customOuterWrap');
-  console.log(outside);
   if(outside === null) {
     customFormContainer.classList.remove('reveal');
     window.removeEventListener('click', handleClickOutside);
   }
 }
 
-function handleCustomForm(e) {
+function handleClickOutsideSchedule(e) {
+  let outside = e.target.closest('#scheduleWrap');
+  if(outside === null) {
+    scheduleFormContainer.classList.remove('reveal');
+    window.removeEventListener('click', handleClickOutsideSchedule);
+  }
+}
+
+function handleCustomFormSubmit(e) {
   e.preventDefault();
   let customLength = parseInt(customForm.custom.value);
-  console.log(customLength);
   timerValue = customLength;
   timeLeftSeconds = timerValue * 60;
-  console.log(timerValue);
-  console.log(timeLeftSeconds);
   updateDisplayBefore(customLength);
   customFormContainer.classList.remove('reveal');
   window.removeEventListener('click', handleClickOutside);
+}
+
+function handleScheduleTimeSubmit(e) {
+  e.preventDefault();
+  let scheduleMin = parseInt(scheduleForm.schedule.value);
+  startCustomMin(scheduleMin);
+  scheduleFormContainer.classList.remove('reveal');
+  window.removeEventListener('click', handleClickOutsideSchedule);
 }
 
 var wait = (amount = 0) => new Promise(resolve => setTimeout(resolve, amount));
@@ -79,17 +105,14 @@ function startTimer(seconds) {
       btn.disabled = true;
       btn.removeEventListener('click', handleTime);
   });
-  console.log('timer is starting');
   let ms = seconds * 1000;
   startTime = new Date().getTime();
-  console.log(startTime);
   isTimerRunning = true;
   startTimerBtn.innerText = 'Pause';
   timer = setInterval(() => {
     timeLeft = Math.max(0, ms - (new Date().getTime()-startTime));
     updateDisplay();
     if(timeLeft === 0) {
-      console.log('time is up');
       notificationText = 'Time up!';
       playNotification();
       playMeow();
@@ -144,6 +167,7 @@ function resetTimer() {
   });
   startTimerBtn.innerText = 'Start';
   startNextBtn.style.display = 'block';
+  scheduleTimeBtn.style.display = 'block';
   startTimerBtn.addEventListener('click', pauseOrResume);
   // updateDisplay();
   updateDisplayBefore(timerValue);
@@ -160,14 +184,11 @@ function startNextMin() {
   } else {
     nextMinute = initialMin + 1;
   }
-  console.log(`Starting min is ${initialMin}. Next min is ${nextMinute}`);
   startNextMinTimer = setInterval(() => {
     currentTime = new Date();
     currentMin = currentTime.getMinutes();
     seconds = currentTime.getSeconds();
-    // startTimerBtn.innerText = `It is ${seconds} seconds`;
     startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
-    console.log(seconds);
     if(currentMin === nextMinute) {
         console.log('Starting timer!');
         notificationText = 'Start writing!';
@@ -181,16 +202,13 @@ function startNextMin() {
         } catch(err) {
           console.log(err);
         }
-        // startNextBtn.innerText = `Write!`;
-        console.log('Still starting timer!');
         clearInterval(startNextMinTimer);
         startTimer(timeLeftSeconds);
         startTimerBtn.addEventListener('click', pauseOrResume);
-        console.log('Back t normal timer!');
     }
   }, 100);
-  console.log(`starting seconds is ${seconds}`);
   startNextBtn.style.display = 'none';
+  scheduleTimeBtn.style.display = 'none';
   startTimerBtn.innerText = `Starting timer in ${60 - seconds} seconds`;
   startTimerBtn.removeEventListener('click', pauseOrResume);
 }
@@ -210,7 +228,6 @@ function startCustomMin(triggerMin) {
     currentTime = new Date();
     currentMin = currentTime.getMinutes();
     seconds = currentTime.getSeconds();
-    // startTimerBtn.innerText = `It is ${seconds} seconds`;
     if(triggerMin === 0) {
       //if trigger min is 0 calc diff between 59 and number and add 1
       tempMin = 59 - currentMin;
@@ -242,7 +259,6 @@ function startCustomMin(triggerMin) {
     }
     // console.log(seconds);
     if(currentMin === minToStart) {
-        console.log('Starting timer!');
         notificationText = 'Start writing!';
         try {
           if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -255,15 +271,14 @@ function startCustomMin(triggerMin) {
           console.log(err);
         }
         // startNextBtn.innerText = `Write!`;
-        console.log('Still starting timer!');
         clearInterval(startNextMinTimer);
         startTimer(timeLeftSeconds);
         startTimerBtn.addEventListener('click', pauseOrResume);
     }
   }, 250);
-  console.log(`starting seconds is ${seconds}`);
   startNextBtn.style.display = 'none';
-  startTimerBtn.innerText = `Starting timer in ${minDiff} min`;
+  scheduleTimeBtn.style.display = 'none';
+  // startTimerBtn.innerText = `Starting timer in ${minDiff} min`;
   startTimerBtn.removeEventListener('click', pauseOrResume);
 }
 
@@ -359,8 +374,8 @@ function handleTime(e) {
   // debugger;
   if(!e.currentTarget.classList.contains('customTime')) {
     customFormContainer.classList.remove('reveal');
+    console.log(e.currentTarget.getAttribute('aria-time'));
   }
-  console.log(e.currentTarget.getAttribute('aria-time'));
   timeSelected.forEach(button => button.classList.remove('selected'));
   e.currentTarget.classList.add('selected');
   timerValue = document.querySelector('.timeWrap .selected').getAttribute('aria-time');
@@ -387,4 +402,6 @@ startTimerBtn.addEventListener('click', pauseOrResume);
 init(); 
 
 customTimeBtn.addEventListener('click', showCustomForm);
-customForm.addEventListener('submit', handleCustomForm);
+scheduleTimeBtn.addEventListener('click',showScheduleForm);
+customForm.addEventListener('submit', handleCustomFormSubmit);
+scheduleForm.addEventListener('submit', handleScheduleTimeSubmit);
